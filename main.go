@@ -36,26 +36,30 @@ func main() {
 }
 
 // test The endpoint, http://locallhost:8080/get, to call to test out the context functionality.
-func test(w http.ResponseWriter, r *http.Request) {
+func test(response http.ResponseWriter, request *http.Request) {
 	fmt.Println("Get was called")
 
-	ctx := r.Context()
-	/* todo: try these options instead:
+	// This is using the requests context meaning if you were to cancel your request while this application is
+	// processing it the done signal will be triggered. Depending on how the app is configured it maybe able to skip
+	// processing that hasn't occurred yet and improve performance.
+	ctx := request.Context()
+
+	/* todo: Try these other options instead:
 	// this can never be cancelled or exceed it runtime amount
 	ctx := context.Background()
 
 	// this returns a context and a function we called cancel
-	ctx, cancel := context.WithCancel(r.Context())
-	// calling cancel to trigger the done signal
+	ctx, cancel := context.WithCancel(request.Context())
+	// calling cancel will trigger the done signal
 	cancel()
 
 	// this will trigger a timeout after 2 seconds
-	ctx, cancel := context.WithTimeout(r.Context(), time.Second * 2)
+	ctx, cancel := context.WithTimeout(request.Context(), time.Second * 2)
 	// from the Golang doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
 	defer cancel()
 
 	// this will trigger a timeout after a time time that is 2 seconds in the future
-	ctx, cancel := context.WithDeadline(r.Context(), time.Now().Add(time.Second * 2))
+	ctx, cancel := context.WithDeadline(request.Context(), time.Now().Add(time.Second * 2))
 	defer cancel()
 	*/
 
@@ -73,7 +77,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 
 		// an error occurred: log it and return a 500
 		fmt.Println("Error retrieving database person:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	// append this person from the database to the slice of people results
@@ -90,19 +94,19 @@ func test(w http.ResponseWriter, r *http.Request) {
 
 		// an error occurred: log it and return a 500
 		fmt.Println("Error retrieving rest person:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	// append this person from the rest call to the slice of people results
 	people = append(people, person)
 
 	// respond with the slice of people rendered as json
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(people)
+	response.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(response).Encode(people)
 	if err != nil {
 		// an error occurred: log it and return a 500
 		fmt.Println("Error building the people response:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
@@ -131,9 +135,9 @@ func isDone(ctx context.Context) bool {
 }
 
 // serverSideGet The endpoint used to simulate a making a server rest call.
-func serverSideGet(w http.ResponseWriter, r *http.Request) {
+func serverSideGet(response http.ResponseWriter, request *http.Request) {
 	fmt.Println("Server side get was called")
-	ctx := r.Context()
+	ctx := request.Context()
 
 	// pause for a bit to allow the context to be cancelled
 	err := pause(ctx)
@@ -144,12 +148,12 @@ func serverSideGet(w http.ResponseWriter, r *http.Request) {
 
 	// return the person named paul as json
 	person := Person{Name: "Paul"}
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(person)
+	response.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(response).Encode(person)
 	if err != nil {
 		// an error occurred: log it and return a 500
 		fmt.Println("Error building the server side get response:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		response.WriteHeader(http.StatusInternalServerError)
 	}
 
 	fmt.Println("Server side get has finished")
