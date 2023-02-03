@@ -41,7 +41,7 @@ Finally, when creating your own potentially long running processing [logic](./ma
 The last thing to show is how you can use the context to store request-scoped values. 
 Since the context gets passed around all the time it provides a way to share these values.
 I have previously used this for logging common values, like a request id. 
-This has been set[logic](./main.go#L70) and read[logic](./main.go#L265) in this example as well.
+This has been [set up](./main.go#L70) and [used](./main.go#L265) in this example as well.
 
 ## Running the database
 This application depends on a Postgres database. 
