@@ -2,8 +2,11 @@ module Contexts
 
 go 1.19
 
-require github.com/gorilla/mux v1.8.0
-require github.com/jackc/pgx/v5 v5.2.0
+require (
+	github.com/google/uuid v1.3.0
+	github.com/gorilla/mux v1.8.0
+	github.com/jackc/pgx/v5 v5.2.0
+)
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect

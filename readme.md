@@ -26,8 +26,22 @@ Let's make our first request, http://localhost:8080/test, and just let it comple
 You should see a json response of two people: Paul and Amy.
 
 Make a second request see what happens when you click cancel while it is being processed.
-You will now see a `The get context was canceled` message in the logs and notice all processing that had not yet occured was skipped.
-todo: add more starting here
+You will now see a `The get context was canceled` message in the logs and notice all processing that had not yet occurred was skipped.
+The application just returns. It doesn't even need to return a http error code nor any JSON response.
+
+Inside the test method you will see a commented out block of code showing all the possible context configuration option. 
+The code is well commented. 
+Reading through it and trying out the options should further help understanding how the context can function.
+
+Here are few things to remember if you want the context cancel or timeout. 
+First be sure to pass the context along as [sometimes](./main.go#L216) it is optional. 
+When errors occur [check](./main.go#L86) to see if the context is done and cease processing.
+Finally, when creating your own potentially long running processing [logic](./main.go#L250) be sure to check for context done signals and return the error.
+
+The last thing to show is how you can use the context to store request-scoped values. 
+Since the context gets passed around all the time it provides a way to share these values.
+I have previously used this for logging common values, like a request id. 
+This has been set[logic](./main.go#L70) and read[logic](./main.go#L265) in this example as well.
 
 ## Running the database
 This application depends on a Postgres database. 
