@@ -10,7 +10,7 @@ We will be examining the lifetime of a request and how the various context confi
 
 Make a request to http://localhost:8080/test to start this process. 
 This is a flat project with all the functionality contained in the main.go file.
-The request to test gets routed to the test function in main.go.
+The request to test gets routed to the [test](./main.go#L44) function in main.go.
 ```
 func test(response http.ResponseWriter, request *http.Request) ...
 ```
@@ -29,7 +29,7 @@ Make a second request see what happens when you click cancel while it is being p
 You will now see a `The get context was canceled` message in the logs and notice all processing that had not yet occurred was skipped.
 The application just returns. It doesn't even need to return a http error code nor any JSON response.
 
-Inside the test method you will see a commented out block of code showing all the possible context configuration option. 
+Inside the test method you will see a commented out block of [code](./main.go#L50) showing all the possible context configuration option. 
 The code is well commented. 
 Reading through it and trying out the options should further help understanding how the context can function.
 
@@ -45,8 +45,8 @@ This has been [set up](./main.go#L70) and [used](./main.go#L265) in this example
 
 ## Running the database
 This application depends on a Postgres database. 
-There is a docker compose file to create it for you.
-Upon start up it will automatically create and populate a person table.
+There is a docker compose [file](./docker-compose.yml) to create it for you.
+Upon start up it will [automatically](./db/init.sql) create and populate a person table.
 
 ```
 start up: docker-compose up -d
