@@ -32,6 +32,31 @@ The application just returns. It doesn't even need to return a http error code n
 Inside the test method you will see a commented out block of [code](./main.go#L50) showing all the possible context configuration option. 
 The code is well commented. 
 Reading through it and trying out the options should further help understanding how the context can function.
+```
+// This is using the requests context meaning if you were to cancel your request while this application is
+// processing it the done signal will be triggered. Depending on how the app is configured it maybe able to skip
+// processing that hasn't occurred yet and improve performance.
+ctx := request.Context()
+
+/* thy this: Try these other options instead:
+// this can never be cancelled or exceed it runtime amount
+ctx := context.Background()
+
+// this returns a context and a function we called cancel
+ctx, cancel := context.WithCancel(request.Context())
+// calling cancel will trigger the done signal
+cancel()
+
+// this will trigger a timeout after 2 seconds
+ctx, cancel := context.WithTimeout(request.Context(), time.Second * 2)
+// from the Golang doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
+defer cancel()
+
+// this will trigger a timeout after a time that is 2 seconds in the future
+ctx, cancel := context.WithDeadline(request.Context(), time.Now().Add(time.Second * 2))
+defer cancel()
+*/
+```
 
 Here are few things to remember if you want the context cancel or timeout. 
 First be sure to pass the context along as [sometimes](./main.go#L216) it is optional. 
