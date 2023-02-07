@@ -58,7 +58,7 @@ defer cancel()
 */
 ```
 
-Here are few things to remember if you want the context cancel or timeout. 
+Here are few things to remember if you want the context to cancel or timeout. 
 First be sure to pass the context along as [sometimes](./main.go#L216) it is optional. 
 When errors occur [check](./main.go#L86) to see if the context is done and cease processing.
 Finally, when creating your own potentially long running processing [logic](./main.go#L250) be sure to check for context done signals and return the error.
