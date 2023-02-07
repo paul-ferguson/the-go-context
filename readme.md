@@ -67,6 +67,25 @@ The last thing to show is how you can use the context to store request-scoped va
 Since the context gets passed around all the time it provides a way to share these values.
 I have previously used this for logging common values, like a request id. 
 This has been [set up](./main.go#L70) and [used](./main.go#L265) in this example as well.
+```
+const requestIDHeaderKey = "request-id"
+const requestIDContextKey = contextKey(requestIDHeaderKey)
+...
+// set the request id as a value in the context
+	requestId := request.Header.Get("request-id")
+	if requestId == "" {
+		// no request id set so create a unique one
+		requestId = uuid.New().String()
+	}
+	ctx = context.WithValue(ctx, requestIDContextKey, requestId)
+
+	logInfo(ctx, "Get was called")
+...
+// there are many logging packages we could have used, but rolling our own for more clarity in this example
+func logInfo(ctx context.Context, message string) {
+	fmt.Println("info", message, ctx.Value(requestIDContextKey))
+}
+```
 
 ## Running the database
 This application depends on a Postgres database. 
