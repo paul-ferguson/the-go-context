@@ -1,8 +1,8 @@
-# The Golang Context
+# The Go Context
 
-In Golang applications you will see a context getting passed around a lot.
+In Go applications you will see a context getting passed around a lot.
 This context carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.
-This example project was created to better understand how the Golang context deadlines and cancellation signals work.
+This example project was created to better understand how the Go context deadlines and cancellation signals work.
 A deadline can occur if we specify a timeout or deadline values in the context.
 A cancellation can occur for many reasons, but we are going to test by clicking cancel as the request is being processed.
 When deadline or cancellation occurs the context send done signal that application can respond to.
@@ -49,7 +49,7 @@ cancel()
 
 // this will trigger a timeout after 2 seconds
 ctx, cancel := context.WithTimeout(request.Context(), time.Second * 2)
-// from the Golang doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
+// from the Go doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
 defer cancel()
 
 // this will trigger a timeout after a time that is 2 seconds in the future

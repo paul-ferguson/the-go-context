@@ -58,7 +58,7 @@ func test(response http.ResponseWriter, request *http.Request) {
 
 	// this will trigger a timeout after 2 seconds
 	ctx, cancel := context.WithTimeout(request.Context(), time.Second * 2)
-	// from the Golang doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
+	// from the Go doc: Even though ctx will be expired, it is good practice to call its cancellation function in any case. Failure to do so may keep the context and its parent alive longer than necessary.
 	defer cancel()
 
 	// this will trigger a timeout after a time that is 2 seconds in the future
